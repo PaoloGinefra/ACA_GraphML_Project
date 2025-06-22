@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+src/ACAgraphML/__init__.py
+src/ACAgraphML.egg-info/PKG-INFO
+src/ACAgraphML.egg-info/SOURCES.txt
+src/ACAgraphML.egg-info/dependency_links.txt
+src/ACAgraphML.egg-info/top_level.txt

@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: ACAgraphML
+Version: 0.0.1
+Summary: A small package for my ACA Grph ML project
+Author-email: Paolo Ginefra <paolo.ginefra@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/PaoloGinefra/ACA_GraphML_Project
+Project-URL: Issues, https://github.com/PaoloGinefra/ACA_GraphML_Project/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+# ACA_GraphML_Project

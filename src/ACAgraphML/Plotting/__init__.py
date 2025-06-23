@@ -3,7 +3,7 @@ from torch_geometric.utils import to_networkx
 import matplotlib.pyplot as plt
 
 
-def plotGraph(graph, title='', minNodeFeat=0, maxNodeFeat=20, minEdgeFeat=1, maxEdgeFeat=3, ax: plt.Axes = None):
+def plotGraph(graph, title='', minNodeFeat=0, maxNodeFeat=20, minEdgeFeat=1, maxEdgeFeat=3, ax: plt.Axes = None, getNodeColors=lambda g: g.x, nodesCmap=plt.cm.tab20, colorBar=False):
     G = to_networkx(graph, to_undirected=True)
     pos = nx.spring_layout(
         G, seed=42, weight=graph.edge_attr*1000, scale=2, k=2, iterations=10000)
@@ -21,13 +21,21 @@ def plotGraph(graph, title='', minNodeFeat=0, maxNodeFeat=20, minEdgeFeat=1, max
                            edge_cmap=plt.cm.cool, edge_vmin=minEdgeFeat, edge_vmax=maxEdgeFeat, ax=ax)
     # nx.draw_networkx_edge_labels(
     #     G, pos, edge_labels=edge_labels, font_color='black', font_size=8, ax=ax)
-    nx.draw_networkx_nodes(G, pos, node_size=200, node_color=graph.x,
-                           cmap=plt.cm.tab20, vmin=minNodeFeat, vmax=maxNodeFeat, ax=ax)
+    nx.draw_networkx_nodes(G, pos, node_size=200, node_color=getNodeColors(graph),
+                           cmap=nodesCmap, vmin=minNodeFeat, vmax=maxNodeFeat, ax=ax)
 
     labels = {i: str(graph.x[i].item()) for i in G.nodes}
     nx.draw_networkx_labels(G, pos, labels=labels,
                             font_size=8, font_color='white', ax=ax)
     ax.set_title(title)
     ax.axis('off')
+
+    if colorBar:
+        vmin = vmin if minNodeFeat else min(getNodeColors(graph))
+        vmax = vmax if maxNodeFeat else max(getNodeColors(graph))
+        sm = plt.cm.ScalarMappable(cmap=nodesCmap, norm=plt.Normalize(
+            vmin=vmin, vmax=vmax))
+        sm.set_array([])
+        plt.colorbar(sm, ax=ax, label='Node Feature')
     if show_plot:
         plt.show()

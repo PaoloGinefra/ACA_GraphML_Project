@@ -1,6 +1,7 @@
-*/data
+**/data
 /data
-*/__pycache__
+**/__pycache__
 /.conda
 /.vscode
 /.pytest_cache
+src/ACAgraphML.egg-info

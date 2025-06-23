@@ -39,3 +39,13 @@ def plotGraph(graph, title='', minNodeFeat=0, maxNodeFeat=20, minEdgeFeat=1, max
         plt.colorbar(sm, ax=ax, label='Node Feature')
     if show_plot:
         plt.show()
+
+
+def plotSteadyState(graph, steadyState, ax=None):
+    plotGraph(graph,
+              getNodeColors=lambda x: steadyState.cpu().numpy(),
+              minNodeFeat=None,
+              maxNodeFeat=None,
+              nodesCmap='winter',
+              ax=ax,
+              colorBar=True)

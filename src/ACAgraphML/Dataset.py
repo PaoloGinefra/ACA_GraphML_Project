@@ -1,10 +1,11 @@
 from torch_geometric.datasets import ZINC
+from torch_geometric.transforms import BaseTransform
 from typing import Literal
 from enum import Enum
 
 
 class ZINC_Dataset(Enum):
-    def loadDatasetZINC(split: Literal['train', 'val', 'test'] = 'train', subset: bool = False):
+    def loadDatasetZINC(split: Literal['train', 'val', 'test'] = 'train', subset: bool = False, transform: BaseTransform = None):
         """
         Load the ZINC dataset.
         Args:
@@ -17,6 +18,7 @@ class ZINC_Dataset(Enum):
             root='./data/ZINC',
             split=split,
             subset=subset,
+            transform=transform
         )
 
     def __init__(self, split: Literal['train', 'val', 'test'] = 'train', subset: bool = False):
@@ -24,13 +26,13 @@ class ZINC_Dataset(Enum):
         self.split = split
         self.subset = subset
 
-    def load(self):
+    def load(self, transform: BaseTransform = None):
         """
         Load the ZINC dataset based on the specified split and subset.
         Returns:
             dataset (ZINC): The loaded ZINC dataset.
         """
-        return ZINC_Dataset.loadDatasetZINC(split=self.split, subset=self.subset)
+        return ZINC_Dataset.loadDatasetZINC(split=self.split, subset=self.subset, transform=transform)
 
     FULL_TRAIN = 'train', False
     FULL_VAL = 'val', False

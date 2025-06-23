@@ -76,4 +76,4 @@ if __name__ == "__main__":
     from ACAgraphML.Dataset import ZINC_Dataset
     dataset = ZINC_Dataset.SMALL_TEST.load(
         transform=SteadyStateTransform(power=500, useEdgeWeights=True))
-    print(dataset[2].x.shape)
+    print(dataset.x.shape)

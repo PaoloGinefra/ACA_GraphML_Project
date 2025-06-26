@@ -2,6 +2,7 @@ from torch_geometric.datasets import ZINC
 from torch_geometric.transforms import BaseTransform
 from typing import Literal
 from enum import Enum
+from .BONDataset import BONDataset
 
 
 class ZINC_Dataset(Enum):

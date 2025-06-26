@@ -1,5 +1,5 @@
 from ACAgraphML.Dataset import ZINC_Dataset
-from ACAgraphML.Datasets.BONDataset import BONDataset
+from ACAgraphML.Dataset.BONDataset import BONDataset
 
 
 def test_bon_dataset():

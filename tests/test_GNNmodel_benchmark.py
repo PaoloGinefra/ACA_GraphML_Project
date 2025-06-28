@@ -248,6 +248,8 @@ class TestGNNModelBenchmark:
 
                 end_time = time.time()
                 avg_time = (end_time - start_time) / 5 * 1000  # ms
+                if (avg_time == 0):
+                    avg_time = 1e-6
                 throughput = batch_size / (avg_time / 1000)  # graphs/second
 
                 layer_results[batch_size] = {

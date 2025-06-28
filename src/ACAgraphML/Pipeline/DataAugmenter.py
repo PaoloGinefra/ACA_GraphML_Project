@@ -45,10 +45,22 @@ class DataAugmenter:
         augmented_data_list = [self.transform(data) for data in tqdm(
             self.dataset, desc="Applying transforms", leave=False)]
 
-        # Create a new dataset instance from the augmented data list
-        newDataset = self.dataset.__class__(
-            root=self.dataset.root, transform=None, pre_transform=None)
-        newDataset.data, newDataset.slices = self.dataset.collate(
-            augmented_data_list)
+        # Try to create a new dataset instance using the standard PyTorch Geometric interface
+        try:
+            # Standard PyTorch Geometric InMemoryDataset interface
+            newDataset = self.dataset.__class__(
+                root=self.dataset.root, transform=None, pre_transform=None)
+            newDataset.data, newDataset.slices = self.dataset.collate(
+                augmented_data_list)
+        except (TypeError, AttributeError):
+            # Handle custom datasets that don't follow the standard interface
+            # Try to create using the original constructor signature
+            try:
+                # Check if the dataset has a simple constructor that takes a data_list
+                newDataset = self.dataset.__class__(augmented_data_list)
+            except TypeError:
+                # Fallback: try to call constructor with no arguments and set data manually
+                newDataset = self.dataset.__class__()
+                newDataset.data_list = augmented_data_list
 
         return newDataset

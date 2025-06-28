@@ -1,5 +1,6 @@
 import torch_geometric.transforms as T
 from torch_geometric.data import Dataset
+from tqdm.notebook import tqdm
 
 
 class DataAugmenter:
@@ -40,14 +41,14 @@ class DataAugmenter:
             Dataset: A new dataset instance of the same class as the original,
             containing all the augmented data samples.
         """
-        augmented_dataset = []
+        # Apply transforms to each data sample in the dataset and collect them in a list
+        augmented_data_list = [self.transform(data) for data in tqdm(
+            self.dataset, desc="Applying transforms", leave=False)]
 
-        # Apply transforms to each data sample in the dataset
-        for data in self.dataset:
-            augmented_data = self.transform(data)
-            augmented_dataset.append(augmented_data)
+        # Create a new dataset instance from the augmented data list
+        newDataset = self.dataset.__class__(
+            root=self.dataset.root, transform=None, pre_transform=None)
+        newDataset.data, newDataset.slices = self.dataset.collate(
+            augmented_data_list)
 
-        # Create a new dataset instance of the same class as the original
-        # This preserves any dataset-specific metadata and functionality
-        augmented_dataset = self.dataset.__class__(augmented_dataset)
-        return augmented_dataset
+        return newDataset

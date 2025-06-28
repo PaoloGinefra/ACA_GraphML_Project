@@ -1,0 +1,19 @@
+GPU available: False, used: False
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+Trial 0 failed with error: mat1 and mat2 must have the same dtype, but got Long and Float
+[32m[I 2025-06-28 20:09:20,937][0m Trial 0 finished with values: [inf, inf, 0.0, inf, inf] and parameters: {'use_augmentation': False, 'add_self_loops': True, 'normalize_features': True, 'add_random_walk_pe': False, 'use_dim_reduction': False, 'explained_variance_ratio': 0.8528818292014123, 'gnn_type': 'GCN', 'hidden_dim': 128, 'num_layers': 5, 'dropout': 0.06974693032602092, 'use_residual': False, 'use_layer_norm': False, 'pooling_type': 'set2set', 'processing_steps': 1, 'regressor_type': 'residual_mlp', 'regressor_hidden_1': 64, 'regressor_activation': 'swish', 'regressor_dropout': 0.12938999080000846, 'regressor_hidden_2': 16, 'batch_size': 64, 'learning_rate': 0.012604664585649461, 'optimizer': 'adam', 'weight_decay': 0.0048696409415209, 'scheduler': 'none'}.[0m
+✅ Single trial completed successfully!
+   Results: MAE=inf, Memory=infGB
+   Throughput=0.00, Latency=infms
+   Training time=infmin
+
+🎉 Local test completed successfully!
+
+📋 Next steps:
+1. Configure Weights & Biases for remote logging
+2. Set up Kaggle API credentials
+3. Run: python deploy_to_kaggle.py
+
+🎯 Local testing completed successfully!
+Your optimization system is ready for Kaggle deployment.

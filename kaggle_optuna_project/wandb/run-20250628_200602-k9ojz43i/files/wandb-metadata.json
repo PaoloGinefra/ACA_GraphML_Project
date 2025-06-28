@@ -1,0 +1,31 @@
+{
+  "os":  "Windows-10-10.0.26100-SP0",
+  "python":  "CPython 3.11.13",
+  "startedAt":  "2025-06-28T18:06:03.030525Z",
+  "program":  "C:\\Polimi\\Master\\2Sem\\ACA_GraphML_Project\\kaggle_optuna_project\\test_wandb_auth.py",
+  "codePath":  "kaggle_optuna_project\\test_wandb_auth.py",
+  "git":  {
+    "remote":  "https://github.com/PaoloGinefra/ACA_GraphML_Project.git",
+    "commit":  "3d78248889fc09727494b6ad3704c9538944fe1b"
+  },
+  "email":  "ginefra.paolo@gmail.com",
+  "root":  "C:\\Polimi\\Master\\2Sem\\ACA_GraphML_Project\\kaggle_optuna_project",
+  "host":  "Huawei",
+  "executable":  "C:\\Polimi\\Master\\2Sem\\ACA_GraphML_Project\\.conda\\python.exe",
+  "codePathLocal":  "test_wandb_auth.py",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "disk":  {
+    "/":  {
+      "total":  "510907117568",
+      "used":  "501004070912"
+    }
+  },
+  "memory":  {
+    "total":  "16969424896"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  }
+}

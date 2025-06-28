@@ -1,0 +1,107 @@
+# Optimization Configuration
+optimization:
+  study_name: "zinc_gnn_multiobjective"
+  n_trials: 50
+  max_epochs: 30
+  early_stopping_patience: 5
+  batch_size_options: [16, 32, 64, 128]
+
+  # Data splits
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+  # Resource constraints
+  memory_limit_gb: 12.0
+  time_limit_hours: 9.0
+
+# Weights & Biases Configuration
+wandb:
+  project: "gnn-hyperopt-zinc"
+  entity: ginefra-paolo
+  tags: ["optuna", "multiobjective", "gnn", "zinc"]
+
+# Dataset Configuration
+dataset:
+  name: "ZINC"
+  subset: true # Use ZINC subset for faster experimentation
+  root_dir: "data/ZINC"
+
+# Hyperparameter Search Spaces
+hyperparameter_ranges:
+  # Data Augmentation
+  augmentation:
+    use_augmentation: [true, false]
+    add_self_loops: [true, false]
+    normalize_features: [true, false]
+    add_random_walk_pe: [true, false]
+    walk_length: [5, 20] # range for random walk PE
+
+  # Dimensionality Reduction
+  dim_reduction:
+    use_dim_reduction: [true, false]
+    explained_variance_ratio: [0.85, 0.99]
+
+  # GNN Architecture
+  gnn:
+    gnn_type: ["GCN", "GIN", "GINE", "GraphSAGE", "GAT"]
+    hidden_dim: [64, 128, 256, 512]
+    num_layers: [2, 6]
+    dropout: [0.0, 0.5]
+    use_residual: [true, false]
+    use_layer_norm: [true, false]
+
+  # Pooling
+  pooling:
+    pooling_type: ["mean", "max", "add", "attention", "set2set"]
+    processing_steps: [1, 5] # for attention and set2set
+
+  # Regressor
+  regressor:
+    regressor_type: ["linear", "mlp", "residual_mlp", "attention_mlp", "ensemble_mlp"]
+    hidden_dims_1: [32, 64, 128, 256]
+    hidden_dims_2: [16, 32, 64, 128]  # for multi-layer regressors
+    activation: ["relu", "gelu", "swish"]
+    dropout: [0.0, 0.5]
+
+  # Training
+  training:
+    learning_rate: [1e-5, 1e-1] # log scale
+    optimizer: ["adam", "adamw", "sgd"]
+    weight_decay: [1e-6, 1e-2] # log scale
+    scheduler: ["cosine", "plateau", "step", "none"]
+    momentum: [0.8, 0.99] # for SGD
+    scheduler_step_size: [5, 20] # for step scheduler
+    scheduler_gamma: [0.1, 0.9] # for step scheduler
+
+# Performance Monitoring
+monitoring:
+  interval_seconds: 1.0
+  track_gpu_memory: true
+  track_cpu_usage: true
+  warmup_iterations: 3
+  performance_samples: 10
+
+# Objectives Configuration
+objectives:
+  primary:
+    name: "val_mae"
+    direction: "minimize"
+    weight: 1.0
+
+  secondary:
+    - name: "memory_usage_gb"
+      direction: "minimize"
+      weight: 0.2
+
+    - name: "throughput_samples_per_sec"
+      direction: "maximize"
+      weight: 0.1
+
+    - name: "latency_ms"
+      direction: "minimize"
+      weight: 0.1
+
+    - name: "training_time_minutes"
+      direction: "minimize"
+      weight: 0.1

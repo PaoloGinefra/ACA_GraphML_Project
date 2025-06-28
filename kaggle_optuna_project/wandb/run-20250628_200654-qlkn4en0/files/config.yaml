@@ -1,0 +1,81 @@
+_wandb:
+    value:
+        cli_version: 0.20.1
+        m: []
+        python_version: 3.11.13
+        t:
+            "1":
+                - 1
+                - 9
+                - 35
+                - 41
+                - 77
+                - 103
+            "2":
+                - 1
+                - 9
+                - 35
+                - 41
+                - 77
+                - 103
+            "3":
+                - 13
+                - 16
+                - 55
+            "4": 3.11.13
+            "5": 0.20.1
+            "8":
+                - 2
+                - 3
+            "10":
+                - 20
+            "12": 0.20.1
+            "13": windows-amd64
+add_random_walk_pe:
+    value: false
+add_self_loops:
+    value: true
+batch_size:
+    value: 64
+dropout:
+    value: 0.06974693032602092
+explained_variance_ratio:
+    value: 0.8528818292014123
+gnn_type:
+    value: GCN
+hidden_dim:
+    value: 128
+learning_rate:
+    value: 5.4880470007660426e-05
+normalize_features:
+    value: true
+num_layers:
+    value: 5
+optimizer:
+    value: adam
+pooling_type:
+    value: set2set
+processing_steps:
+    value: 1
+regressor_activation:
+    value: swish
+regressor_dropout:
+    value: 0.017194260557609198
+regressor_hidden_dims:
+    value:
+        - 32
+        - 16
+regressor_type:
+    value: deep_mlp
+scheduler:
+    value: plateau
+use_augmentation:
+    value: false
+use_dim_reduction:
+    value: false
+use_layer_norm:
+    value: false
+use_residual:
+    value: false
+weight_decay:
+    value: 0.003795853142670641

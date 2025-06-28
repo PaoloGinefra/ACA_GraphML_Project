@@ -1,0 +1,16 @@
+{"time":"2025-06-28T20:06:03.0334469+02:00","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"C:\\Polimi\\Master\\2Sem\\ACA_GraphML_Project\\kaggle_optuna_project\\wandb\\run-20250628_200602-k9ojz43i\\logs\\debug-core.log"}
+{"time":"2025-06-28T20:06:03.6340036+02:00","level":"INFO","msg":"stream: created new stream","id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:03.6340036+02:00","level":"INFO","msg":"stream: started","id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:03.6340036+02:00","level":"INFO","msg":"writer: Do: started","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:03.6340036+02:00","level":"INFO","msg":"sender: started","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:03.6340036+02:00","level":"INFO","msg":"handler: started","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:04.168914+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-28T20:06:04.7551708+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-28T20:06:04.7551708+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-28T20:06:05.5795245+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-28T20:06:05.7670154+02:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 0-0, summary, console lines 0-3","runtime_seconds":0.1874909}],"total_operations":1}}
+{"time":"2025-06-28T20:06:05.7891055+02:00","level":"INFO","msg":"stream: closing","id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:05.7891055+02:00","level":"INFO","msg":"handler: closed","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:05.7891055+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:05.7891055+02:00","level":"INFO","msg":"sender: closed","stream_id":"k9ojz43i"}
+{"time":"2025-06-28T20:06:05.7891055+02:00","level":"INFO","msg":"stream: closed","id":"k9ojz43i"}

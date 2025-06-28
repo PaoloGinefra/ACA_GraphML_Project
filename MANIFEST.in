@@ -1,0 +1,15 @@
+include README.md
+include LICENSE
+include REGRESSOR_IMPLEMENTATION.md
+include GDL_PIPELINE_README.md
+include GNN_Testing_Summary.md
+recursive-include src *.py
+recursive-include src *.md
+recursive-exclude tests *
+recursive-exclude examples *
+recursive-exclude Notebooks *
+recursive-exclude data *
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude *.so
+global-exclude .DS_Store

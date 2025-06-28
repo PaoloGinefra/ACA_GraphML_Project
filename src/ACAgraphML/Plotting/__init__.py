@@ -24,7 +24,7 @@ def plotGraph(graph, title='', minNodeFeat=0, maxNodeFeat=20, minEdgeFeat=1, max
     nx.draw_networkx_nodes(G, pos, node_size=200, node_color=getNodeColors(graph),
                            cmap=nodesCmap, vmin=minNodeFeat, vmax=maxNodeFeat, ax=ax)
 
-    labels = {i: str(graph.x[i].item()) for i in G.nodes}
+    labels = {i: f"{graph.x[i].item():.1f}" for i in G.nodes}
     nx.draw_networkx_labels(G, pos, labels=labels,
                             font_size=8, font_color='white', ax=ax)
     ax.set_title(title)

@@ -56,13 +56,13 @@ class AddMasterNode(BaseTransform):
             master_node_features = torch.zeros(
                 1, data.x.size(1), dtype=data.x.dtype)
         elif self.node_feature_init == 'mean':
-            master_node_features = data.x.mean(dim=0, keepdim=True)
+            master_node_features = data.x.float().mean(dim=0, keepdim=True)
         elif self.node_feature_init == 'ones':
             master_node_features = torch.ones(
                 1, data.x.size(1), dtype=data.x.dtype)
 
         # Add master node to node features
-        data.x = torch.cat([data.x, master_node_features], dim=0)
+        data.x = torch.cat([data.x.float(), master_node_features], dim=0)
 
         # Create edges: master node connects to all other nodes (bidirectionally)
         # Edges from master to all other nodes
@@ -84,6 +84,9 @@ class AddMasterNode(BaseTransform):
         # Handle edge attributes if they exist
         if hasattr(data, 'edge_attr') and data.edge_attr is not None:
             num_new_edges = new_edges.size(1)
+            if data.edge_attr.dim() == 1:
+                # If edge_attr is 1D, reshape to 2D
+                data.edge_attr = data.edge_attr.unsqueeze(-1)
 
             if self.edge_feature_init == 'zero':
                 new_edge_features = torch.zeros(num_new_edges, data.edge_attr.size(1),

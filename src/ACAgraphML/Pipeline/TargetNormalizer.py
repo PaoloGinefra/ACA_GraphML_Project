@@ -133,6 +133,11 @@ class TargetNormalizer:
         newDataset._data.y = (
             newDataset.y - self.target_mean) / self.target_std
 
+        if self.verbose:
+            # Plot the distribution after normalization
+            normalized_targets = torch.cat([data.y for data in newDataset])
+            self.plotTargetDistribution(normalized_targets, " (Normalized)")
+
         return newDataset
 
     def __call__(self, data):

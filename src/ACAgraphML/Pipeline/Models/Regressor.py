@@ -292,7 +292,7 @@ class Regressor(nn.Module):
         # Attention MLP options
         attention_hidden_dim: int = 128,
         attention_num_heads: int = 4,
-        attention_num_layers: int = 2,
+        attention_num_layers: int = 3,
         attention_dropout: float = 0.1,
         # Ensemble options
         ensemble_num_heads: int = 3,

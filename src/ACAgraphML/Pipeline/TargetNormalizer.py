@@ -127,11 +127,11 @@ class TargetNormalizer:
                 newDataset = dataset.__class__()
                 newDataset.data_list = dataset.data_list
 
-        # Now modify targets in place on the copied dataset
-        for data in tqdm(newDataset, desc="Normalizing targets", leave=False):
-            # Normalize the target in place
-            if hasattr(data, 'y') and data.y is not None:
-                data.y = (data.y - self.target_mean) / self.target_std
+        self.target_mean = newDataset.data.y.mean().item()
+        self.target_std = newDataset.data.y.std().item()
+
+        newDataset._data.y = (
+            newDataset.y - self.target_mean) / self.target_std
 
         return newDataset
 

@@ -7,3 +7,4 @@
 src/ACAgraphML.egg-info
 */saved_models
 /kaggleTest
+**.env

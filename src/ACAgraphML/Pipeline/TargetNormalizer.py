@@ -8,16 +8,18 @@ sns.set_theme()
 
 
 class TargetNormalizer:
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False, outlier_threshold=3):
         """
         Initialize the TargetNormalizer.
 
         Args:
             verbose (bool): If True, print additional information during processing.
+            outlier_threshold (float): The z-score threshold to consider a target as an outlier.
         """
         self.verbose = verbose
         self.target_mean = None
         self.target_std = None
+        self.outlier_threshold = outlier_threshold
 
     def plotTargetDistribution(self, targets: torch.Tensor, title_suffix=""):
         """
@@ -34,12 +36,21 @@ class TargetNormalizer:
         ax[0].set_title(f'Target Distribution{title_suffix}')
         ax[0].set_xlabel('Target Values')
         ax[0].set_ylabel('Density')
-        ax[0].axvline(targets.mean().item(), color='red', linestyle='--',
-                      label=f'Mean: {targets.mean().item():.4f}')
-        ax[0].axvline(targets.mean().item() + targets.std().item(), color='orange',
-                      linestyle='--', alpha=0.7, label=f'±1 Std: {targets.std().item():.4f}')
-        ax[0].axvline(targets.mean().item() - targets.std().item(), color='orange',
+        mean = self.target_mean if self.target_mean is not None else targets.mean().item()
+        std = self.target_std if self.target_std is not None else targets.std().item()
+        ax[0].axvline(mean, color='red', linestyle='--',
+                      label=f'Mean: {mean:.4f}')
+        ax[0].axvline(mean + std, color='orange',
+                      linestyle='--', alpha=0.7, label=f'±1 Std: {std:.4f}')
+        ax[0].axvline(mean - std, color='orange',
                       linestyle='--', alpha=0.7)
+        # Add vlines for k_outliers * std
+        k_outliers = self.outlier_threshold if hasattr(
+            self, 'outlier_threshold') else 3
+        ax[0].axvline(mean + k_outliers * std, color='purple', linestyle=':', alpha=0.8,
+                      label=f'+{k_outliers} Std (Outlier)')
+        ax[0].axvline(mean - k_outliers * std, color='purple', linestyle=':', alpha=0.8,
+                      label=f'-{k_outliers} Std (Outlier)')
         ax[0].legend()
 
         # Box plot
@@ -87,6 +98,18 @@ class TargetNormalizer:
         if self.target_mean is None or self.target_std is None:
             raise RuntimeError(
                 "Call fit() first to compute normalization statistics.")
+
+        normalized_ys = [
+            (data.y - self.target_mean) / self.target_std if hasattr(data,
+                                                                     'y') and data.y is not None else None
+            for data in dataset
+        ]
+        normalized_ys = torch.stack(
+            [n for n in normalized_ys if n is not None])
+
+        inliersIndicies = torch.abs(normalized_ys) < self.outlier_threshold
+        if inliersIndicies.any():
+            dataset = dataset.copy(idx=inliersIndicies)
 
         # Create a copy of the dataset first
         try:

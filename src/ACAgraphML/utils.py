@@ -3,7 +3,7 @@ import seaborn as sns
 sns.set_theme()
 
 
-def plotTrueVsPred(y, y_pred, y_val, y_val_pred, title='True vs Predicted Values', filename=None):
+def plotTrueVsPred(y, y_pred, y_val, y_val_pred, title='True vs Predicted Values', filename=None, hardLimit=True):
     """
     Plots true vs predicted values for both training and validation datasets.
 
@@ -14,6 +14,7 @@ def plotTrueVsPred(y, y_pred, y_val, y_val_pred, title='True vs Predicted Values
         y_val_pred (array-like): Predicted values for the validation set.
         title (str, optional): Title of the plot. Defaults to 'True vs Predicted Values'.
         filename (str, optional): If provided, saves the plot to the specified file path.
+        hardLimit (bool, optional): If True, sets x and y limits to [-10, 5]. Defaults to True.
 
     The function creates a scatter plot comparing true and predicted values for both
     training and validation sets, includes a reference line (y = x), and optionally saves the plot.
@@ -28,8 +29,9 @@ def plotTrueVsPred(y, y_pred, y_val, y_val_pred, title='True vs Predicted Values
     plt.xlabel('True Values')
     plt.ylabel('Predictions')
     plt.title(title)
-    plt.xlim(-10, 5)
-    plt.ylim(-10, 5)
+    if hardLimit:
+        plt.xlim(-10, 5)
+        plt.ylim(-10, 5)
     plt.legend()
     if filename:
         plt.savefig(filename, bbox_inches='tight')

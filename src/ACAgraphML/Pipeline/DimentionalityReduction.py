@@ -6,16 +6,20 @@ sns.set_theme()
 
 
 class DimentionalityReduction:
-    def __init__(self, explained_variance_ratio=0.95, verbose=False):
+    def __init__(self, explained_variance_ratio=0.95, verbose=False, useState=False):
         """
         Initialize the DimensionalityReduction class with the desired explained variance ratio.
 
         Args:
             explained_variance_ratio (float): The desired explained variance ratio for PCA.
             verbose (bool): If True, print additional information during processing.
+            useState (bool): If True, use saved principal directions instead of recomputing.
         """
         self.explained_variance_ratio = explained_variance_ratio
         self.verbose = verbose
+        self.useState = useState
+        self.principal_directions = None
+        self.num_components = None
 
     def plotSingularValues(self, singular_values: torch.Tensor):
         """
@@ -52,28 +56,50 @@ class DimentionalityReduction:
         Returns:
             Dataset: A new dataset with reduced node features.
         """
-        # Perform SVD on the node features
-        _, S, V = torch.svd(dataset.data.x)
+        original_dim = dataset.data.x.shape[1]
 
-        if self.verbose:
-            self.plotSingularValues(S)
+        if self.useState and self.principal_directions is not None and self.num_components is not None:
+            V = self.principal_directions
+            num_components = self.num_components
+            if self.verbose:
+                print("Using saved principal directions.")
+        else:
+            # Perform SVD on the node features
+            _, S, V = torch.svd(dataset.data.x)
 
-        # Calculate total variance and cumulative variance
-        total_variance = torch.sum(S ** 2)
-        cumulative_variance = torch.cumsum(S ** 2, dim=0) / total_variance
+            if self.verbose:
+                self.plotSingularValues(S)
 
-        # Determine the number of components to keep
-        num_components = torch.sum(
-            cumulative_variance < self.explained_variance_ratio).item() + 1
+            # Calculate total variance and cumulative variance
+            total_variance = torch.sum(S ** 2)
+            cumulative_variance = torch.cumsum(S ** 2, dim=0) / total_variance
 
-        if (self.verbose):
-            print(f"Number of components to keep: {num_components}")
-            print(
-                f"Explained variance ratio: {cumulative_variance[num_components - 1].item()}")
+            # Determine the number of components to keep
+            num_components = torch.sum(
+                cumulative_variance < self.explained_variance_ratio).item() + 1
+
+            if self.verbose:
+                print(f"Number of components to keep: {num_components}")
+                print(
+                    f"Explained variance ratio: {cumulative_variance[num_components - 1].item()}")
+
+            # Save principal directions and number of components
+            self.principal_directions = V
+            self.num_components = num_components
 
         # Project node features onto the principal components
+        projected = dataset.data.x @ V.T[:, :num_components]
+
+        # Pad with zeros if needed to match original feature dimension
+        if projected.shape[1] < original_dim:
+            pad_size = original_dim - projected.shape[1]
+            projected = torch.cat([projected, torch.zeros(
+                projected.shape[0], pad_size, device=projected.device, dtype=projected.dtype)], dim=1)
+        elif projected.shape[1] > original_dim:
+            projected = projected[:, :original_dim]
+
         newDataset = dataset.__class__(
             root=dataset.root, transform=None, pre_transform=None)
-        newDataset.data.x = dataset.data.x @ V.T[:, :num_components]
+        newDataset.data.x = projected
 
         return newDataset

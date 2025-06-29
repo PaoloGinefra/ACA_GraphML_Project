@@ -25,7 +25,7 @@ import tempfile
 import os
 import warnings
 
-from ACAgraphML.Pipeline.LightningModules.GDLPipelineLighningModule import (
+from ACAgraphML.Pipeline.LightningModules.GDLPipelineLightningModule import (
     GDLPipelineLightningModule,
     create_lightning_baseline,
     create_lightning_standard,

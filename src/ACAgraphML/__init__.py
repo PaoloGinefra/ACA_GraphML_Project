@@ -11,7 +11,7 @@ __email__ = "paolo.ginefra@gmail.com"
 # Import main components
 try:
     from .Pipeline.Models.GDLPipeline import GDLPipeline, GNNConfig, PoolingConfig, RegressorConfig
-    from .Pipeline.LightningModules.GDLPipelineLighningModule import GDLPipelineLightningModule
+    from .Pipeline.LightningModules.GDLPipelineLightningModule import GDLPipelineLightningModule
 except ImportError:
     # Handle optional imports gracefully
     pass

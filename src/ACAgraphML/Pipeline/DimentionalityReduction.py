@@ -1,23 +1,22 @@
 from torch_geometric.data import Dataset
 import torch
+import copy
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_theme()
 
 
 class DimentionalityReduction:
-    def __init__(self, explained_variance_ratio=0.95, verbose=False, useState=False):
+    def __init__(self, explained_variance_ratio=0.95, verbose=False):
         """
         Initialize the DimensionalityReduction class with the desired explained variance ratio.
 
         Args:
             explained_variance_ratio (float): The desired explained variance ratio for PCA.
             verbose (bool): If True, print additional information during processing.
-            useState (bool): If True, use saved principal directions instead of recomputing.
         """
         self.explained_variance_ratio = explained_variance_ratio
         self.verbose = verbose
-        self.useState = useState
         self.principal_directions = None
         self.num_components = None
 
@@ -46,19 +45,18 @@ class DimentionalityReduction:
                       label=f'Explained Variance Ratio = {self.explained_variance_ratio}')
         ax[1].legend()
 
-    def __call__(self, dataset: Dataset) -> Dataset:
+    def __call__(self, dataset: Dataset, useState=False) -> Dataset:
         """
         Apply PCA to reduce the dimensionality of node features in the dataset.
 
         Args:
             dataset (Dataset): The PyTorch Geometric dataset containing graph data.
+            useState (bool): If True, use saved principal directions and number of components.
 
         Returns:
             Dataset: A new dataset with reduced node features.
         """
-        original_dim = dataset.data.x.shape[1]
-
-        if self.useState and self.principal_directions is not None and self.num_components is not None:
+        if useState and self.principal_directions is not None and self.num_components is not None:
             V = self.principal_directions
             num_components = self.num_components
             if self.verbose:
@@ -90,16 +88,15 @@ class DimentionalityReduction:
         # Project node features onto the principal components
         projected = dataset.data.x @ V.T[:, :num_components]
 
-        # Pad with zeros if needed to match original feature dimension
-        if projected.shape[1] < original_dim:
-            pad_size = original_dim - projected.shape[1]
-            projected = torch.cat([projected, torch.zeros(
-                projected.shape[0], pad_size, device=projected.device, dtype=projected.dtype)], dim=1)
-        elif projected.shape[1] > original_dim:
-            projected = projected[:, :original_dim]
+        # Create a copy of the dataset to preserve all attributes
+        newDataset = copy.deepcopy(dataset)
 
-        newDataset = dataset.__class__(
-            root=dataset.root, transform=None, pre_transform=None)
+        # Replace only the node features with the projected ones
         newDataset.data.x = projected
+
+        # If the dataset has a _data_list attribute, update it as well
+        if hasattr(newDataset, '_data_list') and newDataset._data_list is not None:
+            # Clear the data list to force regeneration with new features
+            newDataset._data_list = [None] * len(newDataset)
 
         return newDataset

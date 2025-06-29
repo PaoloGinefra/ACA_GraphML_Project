@@ -1,2 +1,3 @@
 from .DataAugmenter import DataAugmenter
 from .DimentionalityReduction import DimentionalityReduction
+from .TargetNormalizer import TargetNormalizer

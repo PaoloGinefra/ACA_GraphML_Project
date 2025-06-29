@@ -20,7 +20,7 @@ import psutil
 import os
 from typing import Dict, List, Tuple
 
-from ACAgraphML.Pipeline.LightningModules.GDLPipelineLighningModule import (
+from ACAgraphML.Pipeline.LightningModules.GDLPipelineLightningModule import (
     GDLPipelineLightningModule,
     create_lightning_standard,
     create_lightning_advanced,

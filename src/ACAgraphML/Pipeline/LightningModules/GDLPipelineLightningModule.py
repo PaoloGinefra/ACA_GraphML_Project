@@ -34,22 +34,6 @@ from ..Models.GDLPipeline import (
 
 
 class GDLPipelineLightningModule(pl.LightningModule):
-    """
-    PyTorch Lightning Module for GDLPipeline.
-
-    This module wraps the GDLPipeline with comprehensive training, validation,
-    and testing capabilities, designed for extensive hyperparameter optimization.
-
-    Features:
-    - Multiple loss functions and metrics
-    - Advanced optimization strategies with various schedulers
-    - Comprehensive logging and monitoring
-    - Gradient clipping and regularization
-    - Early stopping and model checkpointing support
-    - Target normalization and denormalization
-    - Embedding extraction capabilities
-    - Support for all GDLPipeline configurations
-    """
 
     def __init__(
         self,

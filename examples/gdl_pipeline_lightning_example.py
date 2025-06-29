@@ -20,7 +20,7 @@ from typing import Dict, Any
 # Import your dataset and transforms
 from ACAgraphML.Dataset import ZINC_Dataset
 from ACAgraphML.Transforms import OneHotEncodeFeat
-from ACAgraphML.Pipeline.LightningModules.GDLPipelineLighningModule import (
+from ACAgraphML.Pipeline.LightningModules.GDLPipelineLightningModule import (
     GDLPipelineLightningModule,
     create_lightning_standard,
     create_lightning_advanced,

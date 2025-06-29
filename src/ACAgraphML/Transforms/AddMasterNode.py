@@ -62,7 +62,10 @@ class AddMasterNode(BaseTransform):
                 1, data.x.size(1), dtype=data.x.dtype)
 
         # Add master node to node features
-        data.x = torch.cat([data.x.float(), master_node_features], dim=0)
+        if self.node_feature_init == 'mean':
+            data.x = torch.cat([data.x.float(), master_node_features], dim=0)
+        else:
+            data.x = torch.cat([data.x, master_node_features], dim=0)
 
         # Create edges: master node connects to all other nodes (bidirectionally)
         # Edges from master to all other nodes

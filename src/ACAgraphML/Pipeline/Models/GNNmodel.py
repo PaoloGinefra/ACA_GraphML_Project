@@ -63,6 +63,11 @@ LayerName = Literal[
 
 
 class GNNModel(nn.Module):
+    """
+    Flexible GNN model supporting multiple layer types for molecular property prediction.
+    See module docstring for details.
+    """
+
     def __init__(
         self,
         c_in: int,
@@ -76,6 +81,36 @@ class GNNModel(nn.Module):
         use_layer_norm: bool = True,
         **kwargs: Any,
     ) -> None:
+        """
+        Initialize the GNNModel.
+        See class docstring for argument details.
+
+        Args:
+            c_in (int): Number of input node features.
+            c_hidden (int): Hidden layer dimension.
+            c_out (int): Number of output features.
+            num_layers (int, optional): Number of GNN layers. Default is 4.
+            layer_name (LayerName, optional): Type of GNN layer to use (e.g., 'GINEConv', 'GCN', etc.). Default is 'GINEConv'.
+            dp_rate (float, optional): Dropout rate. Default is 0.1.
+            edge_dim (Optional[int], optional): Edge feature dimension (required for some layers). Default is None.
+            use_residual (bool, optional): Whether to use residual connections. Default is True.
+            use_layer_norm (bool, optional): Whether to use layer normalization. Default is True.
+            **kwargs: Additional arguments for specific GNN layers.
+
+        Attributes:
+            supports_edge_attr (bool): Whether the selected layer supports edge attributes.
+            layer_name (LayerName): Name of the GNN layer type.
+            use_residual (bool): Whether residual connections are used.
+            use_layer_norm (bool): Whether layer normalization is used.
+            c_in (int): Input feature dimension.
+            c_hidden (int): Hidden feature dimension.
+            c_out (int): Output feature dimension.
+            input_proj (nn.Linear): Optional input projection layer.
+            gnn_layers (nn.ModuleList): List of GNN layers.
+            layer_norms (nn.ModuleList): List of layer normalization layers.
+            dropouts (nn.ModuleList): List of dropout layers.
+            output_proj (nn.Linear): Optional output projection layer.
+        """
         super().__init__()
 
         self.supports_edge_attr: bool = layer_name in [
@@ -211,6 +246,17 @@ class GNNModel(nn.Module):
         edge_index: torch.Tensor,
         edge_attr: Optional[torch.Tensor] = None
     ) -> torch.Tensor:
+        """
+        Forward pass of the GNN model.
+
+        Args:
+            x (torch.Tensor): Node features [num_nodes, c_in].
+            edge_index (torch.Tensor): Edge indices [2, num_edges].
+            edge_attr (Optional[torch.Tensor]): Edge features [num_edges, edge_dim].
+
+        Returns:
+            torch.Tensor: Output node features [num_nodes, c_out].
+        """
         if (self.c_in != self.c_hidden):
             x = self.input_proj(x)
 

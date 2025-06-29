@@ -4,7 +4,7 @@
 /.conda
 /.vscode
 /.pytest_cache
-src/ACAgraphML.egg-info
+/src/ACAgraphML.egg-info
 */saved_models
 /kaggleTest
 **.env

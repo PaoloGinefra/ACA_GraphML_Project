@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
-from typing import Dict, Any, Union
+import time
+from typing import Dict, Any, Union, Callable
 sns.set_theme()
 
 
@@ -182,3 +183,62 @@ def print_model_summary(model: Union[torch.nn.Module, Any]) -> None:
             f"Regressor: {(model_params['regressor'] / model_params['total']) * 100:.1f}%")
         print(
             f"Other: {(model_params['other'] / model_params['total']) * 100:.1f}%")
+
+
+def measure_inference_latency(model: torch.nn.Module,
+                              input_fn: Callable,
+                              num_runs: int = 100,
+                              warmup_runs: int = 10) -> Dict[str, float]:
+    """
+    Measure model inference latency.
+
+    Args:
+        model: PyTorch model to benchmark
+        input_fn: Function that returns model inputs (x, edge_index, edge_attr, batch)
+        num_runs: Number of inference runs for timing
+        warmup_runs: Number of warmup runs (not timed)
+
+    Returns:
+        dict: Latency metrics in milliseconds:
+            - mean_latency_ms: Average inference time
+            - std_latency_ms: Standard deviation
+            - min_latency_ms: Minimum inference time
+            - max_latency_ms: Maximum inference time
+    """
+    model.eval()
+    device = next(model.parameters()).device
+
+    # Warmup runs
+    with torch.no_grad():
+        for _ in range(warmup_runs):
+            inputs = input_fn()
+            inputs = [inp.to(device) if torch.is_tensor(inp)
+                      else inp for inp in inputs]
+            _ = model(*inputs)
+
+    # Synchronize GPU before timing
+    if device.type == 'cuda':
+        torch.cuda.synchronize()
+
+    # Timed runs
+    times = []
+    with torch.no_grad():
+        for _ in range(num_runs):
+            start_time = time.perf_counter()
+            inputs = input_fn()
+            inputs = [inp.to(device) if torch.is_tensor(inp)
+                      else inp for inp in inputs]
+            _ = model(*inputs)
+
+            if device.type == 'cuda':
+                torch.cuda.synchronize()
+
+            end_time = time.perf_counter()
+            times.append((end_time - start_time) * 1000)  # Convert to ms
+
+    return {
+        'mean_latency_ms': sum(times) / len(times),
+        'std_latency_ms': (sum((t - sum(times)/len(times))**2 for t in times) / len(times))**0.5,
+        'min_latency_ms': min(times),
+        'max_latency_ms': max(times)
+    }

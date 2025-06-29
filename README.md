@@ -60,6 +60,7 @@ model = create_lightning_standard(
 ## Documentation
 
 See the individual module READMEs for detailed documentation:
+
 - [GDL Pipeline Lightning Module](src/ACAgraphML/Pipeline/LightningModules/README.md)
 - [GDL Pipeline Implementation](REGRESSOR_IMPLEMENTATION.md)
 

@@ -18,7 +18,7 @@ except ImportError:
 
 __all__ = [
     "GDLPipeline",
-    "GNNConfig", 
+    "GNNConfig",
     "PoolingConfig",
     "RegressorConfig",
     "GDLPipelineLightningModule"

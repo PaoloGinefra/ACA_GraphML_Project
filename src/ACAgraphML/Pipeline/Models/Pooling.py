@@ -7,6 +7,15 @@ from typing import Literal, Optional
 
 
 class AttentionalPooling(nn.Module):
+    """
+    Implements an attentional pooling mechanism for graph neural networks.
+    Computes attention weights for each node and aggregates node features
+    using a weighted sum based on these attention scores.
+
+    Args:
+        hidden_dim (int): The dimensionality of the node features.
+    """
+
     def __init__(self, hidden_dim: int) -> None:
         super().__init__()
         self.attention_layer = nn.Sequential(
@@ -16,6 +25,16 @@ class AttentionalPooling(nn.Module):
         )
 
     def forward(self, x: torch.Tensor, batch: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass for attentional pooling.
+
+        Args:
+            x (torch.Tensor): Node feature matrix of shape [num_nodes, hidden_dim].
+            batch (torch.Tensor): Batch vector assigning each node to a graph.
+
+        Returns:
+            torch.Tensor: Pooled graph representations of shape [batch_size, hidden_dim].
+        """
         # Compute attention weights
         attention_weights = self.attention_layer(x)  # [num_nodes, 1]
         attention_weights = torch_geometric.utils.softmax(
@@ -29,6 +48,22 @@ class AttentionalPooling(nn.Module):
 
 
 class Pooling(nn.Module):
+    """
+    General pooling module supporting multiple pooling strategies for graph neural networks.
+
+    Supported pooling types:
+        - 'mean': Global mean pooling
+        - 'max': Global max pooling
+        - 'add': Global add (sum) pooling
+        - 'attentional': Attentional pooling (see AttentionalPooling)
+        - 'set2set': Set2Set pooling
+
+    Args:
+        pooling_type (str): The type of pooling to apply ('mean', 'max', 'add', 'attentional', 'set2set').
+        hidden_dim (int): Hidden dimension size (used for attentional and set2set pooling).
+        processing_steps (int): Number of processing steps for set2set pooling.
+    """
+
     def __init__(
         self,
         pooling_type: Literal['mean', 'max', 'add',
@@ -58,6 +93,16 @@ class Pooling(nn.Module):
             self.pooling_layer = None
 
     def forward(self, x: torch.Tensor, batch: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass for the selected pooling strategy.
+
+        Args:
+            x (torch.Tensor): Node feature matrix of shape [num_nodes, hidden_dim].
+            batch (torch.Tensor): Batch vector assigning each node to a graph.
+
+        Returns:
+            torch.Tensor: Pooled graph representations.
+        """
         if self.pooling_type == 'mean':
             return global_mean_pool(x, batch)
         elif self.pooling_type == 'max':

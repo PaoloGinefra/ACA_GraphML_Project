@@ -56,6 +56,9 @@ class DimentionalityReduction:
         Returns:
             Dataset: A new dataset with reduced node features.
         """
+        normalized_features = dataset.data.x - \
+            dataset.data.x.mean(dim=0, keepdim=True)
+
         if useState and self.principal_directions is not None and self.num_components is not None:
             V = self.principal_directions
             num_components = self.num_components
@@ -63,7 +66,7 @@ class DimentionalityReduction:
                 print("Using saved principal directions.")
         else:
             # Perform SVD on the node features
-            _, S, V = torch.svd(dataset.data.x)
+            _, S, V = torch.svd(normalized_features)
 
             if self.verbose:
                 self.plotSingularValues(S)
@@ -86,7 +89,7 @@ class DimentionalityReduction:
             self.num_components = num_components
 
         # Project node features onto the principal components
-        projected = dataset.data.x @ V.T[:, :num_components]
+        projected = normalized_features @ V.T[:, :num_components]
 
         # Create a copy of the dataset to preserve all attributes
         newDataset = copy.deepcopy(dataset)

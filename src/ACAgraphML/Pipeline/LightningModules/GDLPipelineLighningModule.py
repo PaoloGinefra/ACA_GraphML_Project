@@ -56,8 +56,8 @@ class GDLPipelineLightningModule(pl.LightningModule):
         # Model configuration
         node_features: int,
         edge_features: Optional[int] = None,
-        # "baseline", "standard", "advanced", "lightweight", "attention", "custom"
-        pipeline_config: Optional[str] = "standard",
+        pipeline_config: Literal["baseline", "standard", "advanced",
+                                 "lightweight", "attention", "custom"] = "standard",
 
         # Custom pipeline configuration (used if pipeline_config="custom")
         gnn_config: Optional[Union[GNNConfig, Dict[str, Any]]] = None,
@@ -135,10 +135,10 @@ class GDLPipelineLightningModule(pl.LightningModule):
             label_smoothing: Label smoothing factor
             **pipeline_kwargs: Additional pipeline arguments
         """
-        super().__init__()
-
         # Save all hyperparameters
         self.save_hyperparameters()
+
+        super().__init__()
 
         # Store configuration
         self.node_features = node_features
@@ -351,6 +351,16 @@ class GDLPipelineLightningModule(pl.LightningModule):
                  on_epoch=True, batch_size=batch_size)
         self.log('train_r2', outputs['r2_score'],
                  on_step=False, on_epoch=True, batch_size=batch_size)
+        self.log('train_max_error',
+                 outputs['max_abs_error'], on_step=False, on_epoch=True, batch_size=batch_size)
+        self.log('train_mean_abs_error',
+                 outputs['mean_abs_error'], on_step=False, on_epoch=True, batch_size=batch_size)
+        self.log('train_std_abs_error',
+                 outputs['std_abs_error'], on_step=False, on_epoch=True, batch_size=batch_size)
+        self.log('train_predictions_mean',
+                 outputs['predictions'].mean(), on_step=False, on_epoch=True, batch_size=batch_size)
+        self.log('train_predictions_std',
+                 outputs['predictions'].std(), on_step=False, on_epoch=True, batch_size=batch_size)
 
         # Log learning rate (only when properly attached to trainer)
         try:
@@ -457,10 +467,6 @@ class GDLPipelineLightningModule(pl.LightningModule):
         self.log('val_pred_mean', pred_mean,
                  on_epoch=True, batch_size=total_samples)
         self.log('val_pred_std', pred_std,
-                 on_epoch=True, batch_size=total_samples)
-        self.log('val_target_mean', target_mean,
-                 on_epoch=True, batch_size=total_samples)
-        self.log('val_target_std', target_std,
                  on_epoch=True, batch_size=total_samples)
 
         # Log prediction vs target correlation

@@ -8,9 +8,9 @@ levels and capabilities for capturing molecular features.
 Available Layer Types (ordered by complexity):
 
 LOW COMPLEXITY:
+- GCN: Classic message passing approach
 - SGConv: Simplified GCN, removes nonlinearities, fast baseline
 - GraphConv: Basic message passing, good starting point
-- GCN: Classic spectral approach, simple and interpretable
 
 MEDIUM COMPLEXITY:
 - SAGE: Sampling-based aggregation, scales well with molecular size
@@ -27,7 +27,7 @@ MEDIUM-HIGH COMPLEXITY:
 
 HIGH COMPLEXITY:
 - PNA: Principal Neighbourhood Aggregation, very expressive
-  Combines multiple aggregation functions for diverse molecular patterns
+    Combines multiple aggregation functions for diverse molecular patterns
 
 For ZINC dataset regression:
 - GINEConv/GINConv: Recommended for best performance

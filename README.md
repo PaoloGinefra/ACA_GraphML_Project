@@ -2,6 +2,8 @@
 
 A comprehensive Graph Machine Learning framework for molecular property prediction, developed as part of the Advanced Computer Architecture course at Politecnico di Milano. This project tackles graph regression on the ZINC dataset through extensive hyperparameter optimization and MLOps infrastructure.
 
+For an overview of the project, see the [Project Report](./ACA_GraphMLProjectReport_PaoloGinefra.pdf)
+
 ## 🎯 Project Overview
 
 This project implements a complete graph machine learning pipeline with the following key achievements:
@@ -166,7 +168,7 @@ The `Notebooks/` directory contains comprehensive analysis and experiments:
 
 ## 🎯 Key Findings from Hyperparameter Optimization
 
-Based on comprehensive analysis of 1000+ Optuna trials (`Study_Analysis.ipynb`), here are the **statistically validated optimal configurations**:
+Based on comprehensive analysis of 120+ Optuna trials (`Study_Analysis.ipynb`), here are the **statistically validated optimal configurations**:
 
 ### 🏆 Best Performing Components
 
@@ -187,7 +189,7 @@ Based on comprehensive analysis of 1000+ Optuna trials (`Study_Analysis.ipynb`),
 For optimal performance on ZINC dataset:
 
 ```python
-# Optimal configuration based on 1000+ trials
+# Optimal configuration based on 120+ trials
 optimal_config = {
     'gnn_layer_name': 'GINEConv',          # Best overall GNN architecture
     'gnn_hidden_dim': 128-256,             # Sweet spot for complexity/performance

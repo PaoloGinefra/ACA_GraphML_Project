@@ -3,6 +3,7 @@
 A comprehensive Graph Machine Learning framework for molecular property prediction, developed as part of the Advanced Computer Architecture course at Politecnico di Milano. This project tackles graph regression on the ZINC dataset through extensive hyperparameter optimization and MLOps infrastructure.
 
 For an overview of the project, see the [Project Report](./ACA_GraphMLProjectReport_PaoloGinefra.pdf).
+
 You can find the project presentation [here](https://www.figma.com/proto/nPougIkx9dprQuA8sWU4aO/ACA_GraphMl_Project?node-id=1-2&starting-point-node-id=1%3A2&t=uEPtRrk0iyfjkSJd-1)
 
 ## 🎯 Project Overview
